@@ -13,6 +13,7 @@
 #include "mlir/IR/MLIRContext.h"
 #include "mlir/IR/OperationSupport.h"
 #include "mlir/Parser/Parser.h"
+#include "mlir/Target/SPIRV/Serialization.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/DeclCXX.h"
@@ -26,6 +27,7 @@
 #include "clang/CIR/CIRToCIRPasses.h"
 #include "clang/CIR/Dialect/IR/CIRDialect.h"
 #include "clang/CIR/LowerToLLVM.h"
+#include "clang/CIR/LowerToSPIRV.h"
 #include "clang/CIR/Passes.h"
 #include "clang/CodeGen/BackendUtil.h"
 #include "clang/CodeGen/ModuleBuilder.h"
@@ -278,6 +280,20 @@ public:
       loweredMlirModule->print(*outputStream, flags);
       break;
     }
+    case CIRGenAction::OutputType::EmitSPIRV: {
+      auto loweredMlirModule = lowerFromCIRToMLIR(mlirMod, mlirCtx.get());
+      auto spirvModule = ::mlir::lowerFromMLIRToSPIRV(loweredMlirModule, mlirCtx.get());
+      assert(outputStream && "Why are we here without an output stream?");
+      // FIXME: we cannot roundtrip prettyForm=true right now.
+      mlir::OpPrintingFlags flags;
+      flags.enableDebugInfo(/*enable=*/true, /*prettyForm=*/false);
+      // loweredMlirModule->print(*outputStream, flags);
+      SmallVector<uint32_t, 0> words;
+      ::mlir::spirv::SerializationOptions options;
+      (void) ::mlir::spirv::serialize(spirvModule, words, options);
+      outputStream->write(reinterpret_cast<char*>(words.data()), words.size_in_bytes());
+      break;
+    }
     case CIRGenAction::OutputType::EmitLLVM:
     case CIRGenAction::OutputType::EmitBC:
     case CIRGenAction::OutputType::EmitObj:
@@ -463,6 +479,10 @@ EmitCIROnlyAction::EmitCIROnlyAction(mlir::MLIRContext *_MLIRContext)
 void EmitMLIRAction::anchor() {}
 EmitMLIRAction::EmitMLIRAction(mlir::MLIRContext *_MLIRContext)
     : CIRGenAction(OutputType::EmitMLIR, _MLIRContext) {}
+
+void EmitSPIRVAction::anchor() {}
+EmitSPIRVAction::EmitSPIRVAction(mlir::MLIRContext *_MLIRContext)
+    : CIRGenAction(OutputType::EmitSPIRV, _MLIRContext) {}
 
 void EmitLLVMAction::anchor() {}
 EmitLLVMAction::EmitLLVMAction(mlir::MLIRContext *_MLIRContext)

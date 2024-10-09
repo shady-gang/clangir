@@ -2634,6 +2634,7 @@ static const auto &getFrontendActionTable() {
       {frontend::EmitCIRFlat, OPT_emit_cir_flat},
       {frontend::EmitCIROnly, OPT_emit_cir_only},
       {frontend::EmitMLIR, OPT_emit_mlir},
+      {frontend::EmitSPIRV, OPT_emit_spirv_mlir},
       {frontend::EmitHTML, OPT_emit_html},
       {frontend::EmitLLVM, OPT_emit_llvm},
       {frontend::EmitLLVMOnly, OPT_emit_llvm_only},

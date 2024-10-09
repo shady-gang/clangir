@@ -54,7 +54,7 @@ CreateFrontendBaseAction(CompilerInstance &CI) {
   auto UseCIR = CI.getFrontendOpts().UseClangIRPipeline;
   auto Act = CI.getFrontendOpts().ProgramAction;
   auto CIRAnalysisOnly = CI.getFrontendOpts().ClangIRAnalysisOnly;
-  auto EmitsCIR = Act == EmitCIR || Act == EmitCIRFlat || Act == EmitCIROnly;
+  auto EmitsCIR = Act == EmitCIR || Act == EmitCIRFlat || Act == EmitCIROnly || Act == EmitSPIRV;
 
   if (!UseCIR && EmitsCIR)
     llvm::report_fatal_error(
@@ -96,6 +96,7 @@ CreateFrontendBaseAction(CompilerInstance &CI) {
     return std::make_unique<::cir::EmitCIRFlatAction>();
   case EmitCIROnly:            return std::make_unique<::cir::EmitCIROnlyAction>();
   case EmitMLIR:               return std::make_unique<::cir::EmitMLIRAction>();
+  case EmitSPIRV:               return std::make_unique<::cir::EmitSPIRVAction>();
 #else
   case EmitCIR:
   case EmitCIRFlat:

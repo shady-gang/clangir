@@ -3055,6 +3055,8 @@ def emit_cir_flat : Flag<["-"], "emit-cir-flat">, Visibility<[ClangOption, CC1Op
   Group<Action_Group>, HelpText<"Similar to -emit-cir but also lowers structured CFG into basic blocks.">;
 def emit_mlir : Flag<["-"], "emit-mlir">, Visibility<[CC1Option]>, Group<Action_Group>,
   HelpText<"Build ASTs and then lower through ClangIR to MLIR, emit the .milr file">;
+def emit_spirv_mlir : Flag<["-"], "emit-spirv-mlir">, Visibility<[CC1Option]>, Group<Action_Group>,
+  HelpText<"Build ASTs and then lower through ClangIR to MLIR to SPIR-V, emit the .spv file">;
 /// ClangIR-specific options - END
 
 def flto : Flag<["-"], "flto">,

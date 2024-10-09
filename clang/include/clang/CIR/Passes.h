@@ -22,8 +22,12 @@ namespace cir {
 /// `Std`, to the LLVM dialect for codegen.
 std::unique_ptr<mlir::Pass> createConvertMLIRToLLVMPass();
 
+/// Create a pass for lowering from MLIR builtin dialects to the SPIRV dialect for codegen.
+std::unique_ptr<mlir::Pass> createConvertMLIRToSPIRVPass();
+
 /// Create a pass that fully lowers CIR to the MLIR in-tree dialects.
 std::unique_ptr<mlir::Pass> createConvertCIRToMLIRPass();
+
 
 namespace direct {
 /// Create a pass that fully lowers CIR to the LLVMIR dialect.
