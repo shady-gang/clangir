@@ -4571,6 +4571,7 @@ static bool isStrictlyPreprocessorAction(frontend::ActionKind Action) {
   case frontend::EmitHTML:
   case frontend::EmitLLVM:
   case frontend::EmitLLVMOnly:
+  case frontend::EmitSPIRV:
   case frontend::EmitCodeGenOnly:
   case frontend::EmitObj:
   case frontend::ExtractAPI:

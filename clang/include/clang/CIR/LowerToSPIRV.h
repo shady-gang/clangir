@@ -25,7 +25,7 @@ namespace mlir {
 class MLIRContext;
 class ModuleOp;
 
-spirv::ModuleOp lowerFromMLIRToSPIRV(mlir::ModuleOp theModule,
+mlir::ModuleOp lowerFromMLIRToSPIRV(mlir::ModuleOp theModule,
                                     mlir::MLIRContext *mlirCtx);
 } // namespace mlir
 

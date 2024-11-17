@@ -43,4 +43,5 @@ add_clang_library(clangCIRLoweringThroughMLIR
   MLIRMemRefDialect
   MLIROpenMPDialect
   MLIROpenMPToLLVMIRTranslation
+  MLIRConvertToSPIRVPass
   )

@@ -282,7 +282,7 @@ public:
     }
     case CIRGenAction::OutputType::EmitSPIRV: {
       auto loweredMlirModule = lowerFromCIRToMLIR(mlirMod, mlirCtx.get());
-      auto spirvModule = ::mlir::lowerFromMLIRToSPIRV(loweredMlirModule, mlirCtx.get());
+      auto spirvModule = cast<::mlir::spirv::ModuleOp>(::mlir::lowerFromMLIRToSPIRV(loweredMlirModule, mlirCtx.get()));
       assert(outputStream && "Why are we here without an output stream?");
       // FIXME: we cannot roundtrip prettyForm=true right now.
       mlir::OpPrintingFlags flags;
@@ -374,6 +374,8 @@ getOutputStream(CompilerInstance &ci, StringRef inFile,
     return ci.createDefaultOutputFile(false, inFile, "cir");
   case CIRGenAction::OutputType::EmitMLIR:
     return ci.createDefaultOutputFile(false, inFile, "mlir");
+  case CIRGenAction::OutputType::EmitSPIRV:
+    return ci.createDefaultOutputFile(false, inFile, "spv");
   case CIRGenAction::OutputType::EmitLLVM:
     return ci.createDefaultOutputFile(false, inFile, "ll");
   case CIRGenAction::OutputType::EmitBC:
